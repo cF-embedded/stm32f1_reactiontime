@@ -1,0 +1,90 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "first build",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "command": "cmake",
+            "args": [
+                "-G", "Ninja",
+                "-B", "${workspaceFolder}/out/Debug",
+                "-DCMAKE_TOOLCHAIN_FILE=${workspaceFolder}/cmake/toolchain-arm-gcc.cmake",
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "build project",
+            "type": "shell",
+            "command": "ninja",
+            "args": ["-v"],
+            "options": {
+                "cwd": "${workspaceFolder}/out/Debug"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": {
+                "base": "$gcc", 
+            }
+        },   
+        {
+            "label": "clean project",
+            "type": "shell",
+            "command": "ninja",
+            "args": ["-v", "clean"],
+            "options": {
+                "cwd": "${workspaceFolder}/out/Debug"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "flash-stlink",
+            "type": "shell",
+            "command": "ST-LINK_CLI",
+            "args": [
+                "-c",
+                "SWD",
+                "UR",
+                "-P",
+                "${workspaceFolder}/out/Debug/src/${workspaceFolderBasename}.hex",
+                "0x8000000",
+                "-V",
+                "after_programming",
+                "-Rst",
+                "-Run"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/out/Debug"
+            },
+            "dependsOn": "build-debug",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "run tests",
+            "type": "shell",
+            "command": "ctest",
+            "args": ["--verbose", "--output-on-failure"] ,
+            "options": {
+                "cwd": "${workspaceFolder}/out/Debug"
+            },
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+        },
+    ]
+}

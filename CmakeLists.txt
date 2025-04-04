@@ -1,0 +1,17 @@
+cmake_minimum_required(VERSION 3.17)
+
+enable_language(ASM)
+
+project(stm32f1_reactiontime)
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+include(CTest)
+# googletest root (your path to googletest/install) #
+set(GTEST_ROOT $ENV{googletest})  
+
+# tests subdirectories #
+add_subdirectory(test/unit_test/template)
+
+# main platform program subdirectory #
+add_subdirectory(src)

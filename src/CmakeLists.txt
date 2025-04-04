@@ -1,0 +1,77 @@
+set(CMAKE_TOOLCHAIN_FILE ../cmake/toolchain-arm-gcc.cmake)
+include(../cmake/compiler_flags.cmake)
+
+set(GLOBAL_DEFINES
+    -DSTM32F103xE
+)
+
+set(CXX_SRCS
+    # main
+    main.cpp
+    # main section
+    initialization/init.cpp
+    # external
+    external/adafruit/Adafruit_GFX.cpp
+    external/adafruit/Print.cpp
+    # code
+    code/lcd/lcd.cpp
+)
+
+set(INCLUDE_DIRS
+    # external
+    external/stm32
+    external/cmsis
+    external/freertos/include
+    external/adafruit
+    # hw
+    hw/core_init
+    hw/gpio
+    hw/ili9325
+    hw/ads7843
+    # utils
+    utils
+    # code
+    code/lcd
+    # main section
+    initialization
+)
+
+set(C_SRCS
+    #external
+    external/stm32/system_stm32f1xx.c
+    external/freertos/croutine.c
+    external/freertos/event_groups.c
+    external/freertos/heap_3.c
+    external/freertos/stream_buffer.c
+    external/freertos/list.c
+    external/freertos/port.c
+    external/freertos/queue.c
+    external/freertos/tasks.c
+    external/freertos/timers.c
+    # hw 
+    hw/startup/hardfault.c
+    hw/core_init/core_init.c
+    hw/gpio/gpio.c
+    hw/ili9325/ili9325.c
+    hw/ads7843/ads7843.c
+    # utils
+    utils/syscalls.c
+)
+
+set(ASM_SRCS
+    hw/startup/startup_stm32f103xe.s
+)
+
+set(LINKED_LIBS
+
+)
+
+link_directories(
+
+)
+
+include_directories(${INCLUDE_DIRS})
+add_definitions(${GLOBAL_DEFINES})
+
+# generate elf file
+add_arm_executable(${CMAKE_PROJECT_NAME} ${C_SRCS} ${ASM_SRCS} ${CXX_SRCS})

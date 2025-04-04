@@ -1,0 +1,9 @@
+{
+  "cmake.buildDirectory": "${workspaceFolder}/out/Debug",
+  "files.associations": {
+    "*.h": "c",
+    "*.c": "c",
+    "compare": "cpp",
+    "cstdint": "cpp"
+  },
+}
