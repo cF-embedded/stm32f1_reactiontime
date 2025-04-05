@@ -18,15 +18,16 @@ extern "C"
 #endif /* __cplusplus */
 
     /**
-     * @defgroup hw_core
-     * @{
-     */
-
-    /**
      * @brief function to hw initialize ads7843
      *
      */
     void ads7843_init(void);
+
+    /**
+     * @brief get touch screen act state
+     *
+     */
+    uint32_t ads7843_touch_screen_get(void);
 /**
  * @}
  */
