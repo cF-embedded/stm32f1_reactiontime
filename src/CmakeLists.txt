@@ -16,6 +16,10 @@ set(CXX_SRCS
     # code
     code/lcd/lcd.cpp
     code/game/game.cpp
+    code/game/state/startstate.cpp
+    code/game/state/reactionstate.cpp
+    code/game/state/waitingstate.cpp
+    code/game/state/resultstate.cpp
 )
 
 set(INCLUDE_DIRS
@@ -34,6 +38,7 @@ set(INCLUDE_DIRS
     # code
     code/lcd
     code/game
+    code/game/state
     # main section
     initialization
 )

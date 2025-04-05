@@ -37,18 +37,18 @@ LCD::LCD(int16_t width, int16_t height) : Adafruit_GFX(width, height)
     ili9325_write_reg(ILI9325_POWER_CONTROL_2, 0x0007);                   // DC1[2:0], DC0[2:0], VC[2:0]
     ili9325_write_reg(ILI9325_POWER_CONTROL_3, 0x0000);                   // VREG1OUT voltage
     ili9325_write_reg(ILI9325_POWER_CONTROL_4, 0x0000);                   // VDV[4:0] for VCOM amplitude
-    rtos_delay(200);                                                      // Dis-charge capacitor power voltage 200ms
-    ili9325_write_reg(ILI9325_POWER_CONTROL_1, 0x1190);                   // SAP, BT[3:0], AP, DSTB, SLP, STB (other value: 0x1190 0x1290 0x1490 0x1690)
-    ili9325_write_reg(ILI9325_POWER_CONTROL_2, 0x0221);                   // DC1[2:0], DC0[2:0], VC[2:0] (other value: 0x0221 0x0227)
-    rtos_delay(50);                                                       // Dis-charge capacitor power voltage 50ms
-    ili9325_write_reg(ILI9325_POWER_CONTROL_3, 0x001A);                   // VREG1OUT voltage (other value: 0x0018 0x001A 0x001B 0x001C)
-    rtos_delay(50);                                                       // Dis-charge capacitor power voltage 50ms
-    ili9325_write_reg(ILI9325_POWER_CONTROL_4, 0x1800);                   // VDV[4:0] for VCOM amplitude (other: 0x1A00)
-    ili9325_write_reg(ILI9325_POWER_CONTROL_7, 0x002A);                   // Set VCM[5:0] for VCOMH (other: 0x0025)
-    ili9325_write_reg(ILI9325_FRAME_RATE_AND_COLOR_CONTROL, 0x000C);      // Set Frame Rate
-    rtos_delay(50);                                                       // Dis-charge capacitor power voltage 50ms
-    ili9325_write_reg(ILI9325_HORIZONTAL_GRAM_ADDRESS_SET, 0x0000);       // Set GRAM horizontal Address
-    ili9325_write_reg(ILI9325_VERTICAL_GRAM_ADDRESS_SET, 0x0000);         // Set GRAM Vertical Address
+    // rtos_delay(200);                                                      // Dis-charge capacitor power voltage 200ms
+    ili9325_write_reg(ILI9325_POWER_CONTROL_1, 0x1190);   // SAP, BT[3:0], AP, DSTB, SLP, STB (other value: 0x1190 0x1290 0x1490 0x1690)
+    ili9325_write_reg(ILI9325_POWER_CONTROL_2, 0x0221);   // DC1[2:0], DC0[2:0], VC[2:0] (other value: 0x0221 0x0227)
+    // rtos_delay(50);                                                       // Dis-charge capacitor power voltage 50ms
+    ili9325_write_reg(ILI9325_POWER_CONTROL_3, 0x001A);   // VREG1OUT voltage (other value: 0x0018 0x001A 0x001B 0x001C)
+    // rtos_delay(50);                                                       // Dis-charge capacitor power voltage 50ms
+    ili9325_write_reg(ILI9325_POWER_CONTROL_4, 0x1800);                // VDV[4:0] for VCOM amplitude (other: 0x1A00)
+    ili9325_write_reg(ILI9325_POWER_CONTROL_7, 0x002A);                // Set VCM[5:0] for VCOMH (other: 0x0025)
+    ili9325_write_reg(ILI9325_FRAME_RATE_AND_COLOR_CONTROL, 0x000C);   // Set Frame Rate
+    // rtos_delay(50);                                                       // Dis-charge capacitor power voltage 50ms
+    ili9325_write_reg(ILI9325_HORIZONTAL_GRAM_ADDRESS_SET, 0x0000);   // Set GRAM horizontal Address
+    ili9325_write_reg(ILI9325_VERTICAL_GRAM_ADDRESS_SET, 0x0000);     // Set GRAM Vertical Address
     ili9325_write_reg(ILI9325_GAMMA_CONTROL_1, 0x0000);
     ili9325_write_reg(ILI9325_GAMMA_CONTROL_2, 0x0000);
     ili9325_write_reg(ILI9325_GAMMA_CONTROL_3, 0x0000);
