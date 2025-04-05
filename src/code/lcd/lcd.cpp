@@ -95,14 +95,14 @@ void LCD::drawPixel(int16_t x, int16_t y, uint16_t color)
     ili9325_write_ram(color);   // Write the color to the GRAM
 }
 
-void LCD::fillScreen(uint16_t color)
+void LCD::fillScreen(Color color)
 {
     ili9325_set_cursor(0, 0);
 
     /* Fill the entire screen */
     for(uint i = 0; i < (width() * height()); i++)
     {
-        ili9325_write_ram(color);   // Write the color to the GRAM
+        ili9325_write_ram(to_uint16(color));   // Write the color to the GRAM
     }
 }
 
