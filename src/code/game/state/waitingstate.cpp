@@ -33,7 +33,11 @@ void WaitingState::Update(Game* game)
 {
     tick_t actTime = rtos_tick_count_get();
 
-    if(isTimeElapsed(actTime))
+    if(game->Lcd.isTouchScreenPressed())
+    {
+        game->ChangeState(new QuicklyState());
+    }
+    else if(isTimeElapsed(actTime))
     {
         game->ChangeState(new ReactionState());
     }

@@ -9,12 +9,23 @@
 
 #include "resultstate.h"
 #include "game.h"
+#include "lcd.h"
+#include "string.h"
 
-void ResultState::Enter(Game* game) {}
+ResultState::ResultState(tick_t reactionTime) : _reactionTime(reactionTime) {}
+
+void ResultState::Enter(Game* game)
+{
+    game->Lcd.fillScreen(Color::CYAN);
+    game->Lcd.drawString(70, 125, std::to_string(_reactionTime) + " ms", Color::BLACK, Color::CYAN, 2);
+}
 
 void ResultState::Update(Game* game)
 {
-    game->ChangeState(new StartState());
+    if(game->Lcd.isTouchScreenPressed())
+    {
+        game->ChangeState(new StartState());
+    }
 }
 
 void ResultState::Exit(Game* game) {}

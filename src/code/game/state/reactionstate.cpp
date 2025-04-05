@@ -18,9 +18,9 @@ extern "C"
 
 void ReactionState::Enter(Game* game)
 {
+    reactionTime = rtos_tick_count_get();
     game->Lcd.fillScreen(Color::GREEN);
     game->Lcd.drawString(50, 125, "GO! Tap now!", Color::BLACK, Color::GREEN, 2);
-    reactionTime = rtos_tick_count_get();
 }
 
 void ReactionState::Update(Game* game)
