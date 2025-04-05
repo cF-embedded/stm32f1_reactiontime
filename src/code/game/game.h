@@ -11,6 +11,7 @@
 #define _GAME_H
 
 #include "gamestate.h"
+#include "lcd.h"
 #include "reactionstate.h"
 #include "resultstate.h"
 #include "startstate.h"
@@ -19,6 +20,7 @@
 class Game
 {
   public:
+    LCD Lcd;
     Game();
 
     void ChangeState(GameState* state);
@@ -29,5 +31,12 @@ class Game
 
     GameState* currentState;
 };
+
+/**
+ * @brief game task initialization.
+ *
+ * game task is responsible for controll whole game
+ */
+void game_task_init(void);
 
 #endif   // _GAME_H

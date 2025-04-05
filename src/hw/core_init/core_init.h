@@ -8,20 +8,21 @@
 #define _CORE_INIT_H_
 
 #ifdef __cplusplus
- extern "C" {
+extern "C"
+{
 #endif /* __cplusplus */
 
-/**
- * @defgroup hw_core
- * @{
- */
+    /**
+     * @defgroup hw_core
+     * @{
+     */
 
-/**
- * @brief Core initialization.
- *
- * This function configures clocks, FPU and other core functions.
- */
-void core_init(void);
+    /**
+     * @brief Core initialization.
+     *
+     * This function configures clocks, FPU and other core functions.
+     */
+    void core_init(void);
 
 /**
  * @}
