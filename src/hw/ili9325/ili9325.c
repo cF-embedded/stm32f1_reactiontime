@@ -62,6 +62,15 @@ void ili9325_write_ram(uint16_t data)
     ili9325_write_reg(RW_GRAM, data);
 }
 
+void ili9325_write_ram_fast(uint16_t* data, uint32_t length)
+{
+    ILI9325_REG_ADDR = RW_GRAM;
+    for(uint32_t i = 0; i < length; ++i)
+    {
+        ILI9325_RAM_ADDR = data[i];
+    }
+}
+
 uint16_t ili9325_read_ram(void)
 {
     return ili9325_read_reg(RW_GRAM);
@@ -128,13 +137,13 @@ void fsmc_init(void)
     /* Enable FSMC clock */
     RCC->AHBENR |= RCC_AHBENR_FSMCEN;
 
-    FSMC_Bank1->BTCR[1] = (30 << FSMC_BTRx_ADDSET_Pos)   // Address Setup Time
-        | (0 << FSMC_BTRx_ADDHLD_Pos)                    // Address Hold Time
-        | (30 << FSMC_BTRx_DATAST_Pos)                   // Data Setup Time
-        | (0 << FSMC_BTRx_BUSTURN_Pos)                   // Bus Turn Around Duration
-        | (0 << FSMC_BTRx_CLKDIV_Pos)                    // CLK Division
-        | (0 << FSMC_BTRx_DATLAT_Pos)                    // Data Latency
-        | (0 << FSMC_BTRx_ACCMOD_Pos);                   // Access Mode A
+    FSMC_Bank1->BTCR[1] = (1 << FSMC_BTRx_ADDSET_Pos)   // Address Setup Time
+        | (0 << FSMC_BTRx_ADDHLD_Pos)                   // Address Hold Time
+        | (0 << FSMC_BTRx_DATAST_Pos)                   // Data Setup Time
+        | (0 << FSMC_BTRx_BUSTURN_Pos)                  // Bus Turn Around Duration
+        | (0 << FSMC_BTRx_CLKDIV_Pos)                   // CLK Division
+        | (0 << FSMC_BTRx_DATLAT_Pos)                   // Data Latency
+        | (0 << FSMC_BTRx_ACCMOD_Pos);                  // Access Mode A
 
     FSMC_Bank1E->BWTR[1] = (2 << FSMC_BWTRx_ADDSET_Pos)   // Address Setup Time
         | (0 << FSMC_BWTRx_ADDHLD_Pos)                    // Address Hold Time

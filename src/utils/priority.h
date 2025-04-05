@@ -11,6 +11,11 @@
 #ifndef PRIORITY_H
 #define PRIORITY_H
 
+/** Position estimation task stacksize */
+#define GAME_TASK_STACKSIZE (configMINIMAL_STACK_SIZE * 10)
+/** Position estimation task priority */
+#define GAME_TASK_PRIORITY (tskIDLE_PRIORITY + 1)
+
 /**
  * @}
  */
