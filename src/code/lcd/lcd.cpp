@@ -7,12 +7,16 @@
  *
  */
 
-#include "lcd.h"
-#include "Adafruit_GFX.h"
-#include "ads7843.h"
+extern "C"
+{
 #include "ili9325.h"
 #include "ili9325_registers.h"
 #include "platform_specific.h"
+}
+
+#include "Adafruit_GFX.h"
+#include "ads7843.h"
+#include "lcd.h"
 #include <math.h>
 
 LCD::LCD(int16_t width, int16_t height) : Adafruit_GFX(width, height)
@@ -86,6 +90,16 @@ bool LCD::isTouchScreenPressed()
     return (ads7843_touch_screen_get() == 0);
 }
 
+void LCD::drawString(int16_t x, int16_t y, std::string text, Color color, Color bg, uint8_t size)
+{
+    int16_t cursor_x = x;
+
+    for(char c : text)
+    {
+        drawChar(cursor_x, y, c, to_uint16(color), to_uint16(bg), size);
+        cursor_x += 6 * size;
+    }
+}
 void LCD::drawPixel(int16_t x, int16_t y, uint16_t color)
 {
     if((x < 0) || (x >= width()) || (y < 0) || (y >= height()))

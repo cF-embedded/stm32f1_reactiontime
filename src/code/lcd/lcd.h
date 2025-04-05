@@ -9,6 +9,7 @@
 
 #include "Adafruit_GFX.h"
 #include <ili9325.h>
+#include <string.h>
 
 #ifndef _LCD_H
 #define _LCD_H
@@ -44,6 +45,7 @@ class LCD : public Adafruit_GFX
 
     bool isTouchScreenPressed();
     void begin();
+    void drawString(int16_t x, int16_t y, std::string, Color color, Color bg, uint8_t size);
     void drawPixel(int16_t x, int16_t y, uint16_t color);
     void fillScreen(Color color);
     int16_t setBacklight(uint8_t percent);
