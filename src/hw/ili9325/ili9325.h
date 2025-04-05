@@ -62,6 +62,14 @@ extern "C"
     void ili9325_write_ram(uint16_t data);
 
     /**
+     * @brief Write 16 bit values to RAM Memory by DMA
+     *
+     * @param data
+     * @param length
+     */
+    uint32_t ili9325_write_ram_dma(uint16_t* data, uint32_t length);
+
+    /**
      * @brief Read 16 bit value from RAM Memory
      *
      * @return uint16_t

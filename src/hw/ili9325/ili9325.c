@@ -16,6 +16,9 @@
 #define ILI9325_REG_ADDR (*((volatile unsigned short*)0x60000000))
 #define ILI9325_RAM_ADDR (*((volatile unsigned short*)0x60020000))
 
+/* DMA transfer completed semaphore */
+sem_t dma_transfer_completed;
+
 /* ili9325 instruction registers */
 #define RW_GRAM 0x22 /* READ OR WRITE DATA TO GRAM */
 
@@ -36,11 +39,14 @@ static void fsmc_init(void);
  */
 static void timer_init(void);
 
+static void dma_init(void);
+
 void ili9325_init(void)
 {
     gpio_init();
     fsmc_init();
     timer_init();
+    dma_init();
 }
 
 void ili9325_write_reg(uint8_t reg, uint16_t data)
@@ -60,6 +66,31 @@ uint16_t ili9325_read_reg(uint8_t reg)
 void ili9325_write_ram(uint16_t data)
 {
     ili9325_write_reg(RW_GRAM, data);
+}
+
+uint32_t ili9325_write_ram_dma(uint16_t* data, uint32_t length)
+{
+    ILI9325_REG_ADDR = RW_GRAM;
+
+    DMA1_Channel1->CCR = 0;
+    DMA1_Channel1->CPAR = (uint32_t)&ILI9325_RAM_ADDR;
+    DMA1_Channel1->CMAR = (uint32_t)data;
+    DMA1_Channel1->CNDTR = length;
+
+    DMA1_Channel1->CCR = DMA_CCR_MEM2MEM   // mem2mem
+        | DMA_CCR_MINC                     // increment memory
+        | DMA_CCR_MSIZE_0                  // 16-bit memory size
+        | DMA_CCR_PSIZE_0                  // 16-bit peripheral size
+        | DMA_CCR_TCIE;                    // transfer complete interrupt
+
+    __NOP();
+    DMA1_Channel1->CCR |= DMA_CCR_EN;
+
+    if(rtos_sem_take(dma_transfer_completed, 100) != true)
+    {
+        /* Report timeout */
+        return -EBUSY;
+    }
 }
 
 uint16_t ili9325_read_ram(void)
@@ -128,13 +159,13 @@ void fsmc_init(void)
     /* Enable FSMC clock */
     RCC->AHBENR |= RCC_AHBENR_FSMCEN;
 
-    FSMC_Bank1->BTCR[1] = (30 << FSMC_BTRx_ADDSET_Pos)   // Address Setup Time
-        | (0 << FSMC_BTRx_ADDHLD_Pos)                    // Address Hold Time
-        | (30 << FSMC_BTRx_DATAST_Pos)                   // Data Setup Time
-        | (0 << FSMC_BTRx_BUSTURN_Pos)                   // Bus Turn Around Duration
-        | (0 << FSMC_BTRx_CLKDIV_Pos)                    // CLK Division
-        | (0 << FSMC_BTRx_DATLAT_Pos)                    // Data Latency
-        | (0 << FSMC_BTRx_ACCMOD_Pos);                   // Access Mode A
+    FSMC_Bank1->BTCR[1] = (1 << FSMC_BTRx_ADDSET_Pos)   // Address Setup Time
+        | (0 << FSMC_BTRx_ADDHLD_Pos)                   // Address Hold Time
+        | (2 << FSMC_BTRx_DATAST_Pos)                   // Data Setup Time
+        | (0 << FSMC_BTRx_BUSTURN_Pos)                  // Bus Turn Around Duration
+        | (0 << FSMC_BTRx_CLKDIV_Pos)                   // CLK Division
+        | (0 << FSMC_BTRx_DATLAT_Pos)                   // Data Latency
+        | (0 << FSMC_BTRx_ACCMOD_Pos);                  // Access Mode A
 
     FSMC_Bank1E->BWTR[1] = (2 << FSMC_BWTRx_ADDSET_Pos)   // Address Setup Time
         | (0 << FSMC_BWTRx_ADDHLD_Pos)                    // Address Hold Time
@@ -171,4 +202,25 @@ void timer_init(void)
 
     /* Enable timer */
     TIM3->CR1 |= TIM_CR1_CEN;
+}
+
+void dma_init(void)
+{
+    RCC->AHBENR |= RCC_AHBENR_DMA1EN;
+    dma_transfer_completed = rtos_sem_bin_create();
+    NVIC_SetPriority(DMA1_Channel1_IRQn, 10);
+    NVIC_EnableIRQ(DMA1_Channel1_IRQn);
+}
+
+void DMA1_Channel1_IRQHandler(void)
+{
+    int32_t yield = 0;
+
+    if(DMA1->ISR & DMA_ISR_TCIF1)
+    {
+        DMA1->IFCR |= DMA_IFCR_CTCIF1;
+        rtos_sem_give_isr(dma_transfer_completed, &yield);
+    }
+
+    portYIELD_FROM_ISR(yield);
 }

@@ -83,6 +83,8 @@ LCD::LCD(int16_t width, int16_t height) : Adafruit_GFX(width, height)
     ili9325_write_reg(ILI9325_PANEL_INTERFACE_CONTROL_5, 0x0000);
     ili9325_write_reg(ILI9325_PANEL_INTERFACE_CONTROL_6, 0x0000);
     ili9325_write_reg(ILI9325_DISPLAY_CONTROL_1, 0x0133);   // 262K color and display ON
+
+    fillScreen(Color::BLACK);
 }
 
 bool LCD::isTouchScreenPressed()
@@ -111,12 +113,15 @@ void LCD::drawPixel(int16_t x, int16_t y, uint16_t color)
 
 void LCD::fillScreen(Color color)
 {
+    static uint16_t color_buffer[320];
+    for(int i = 0; i < 320; ++i)
+        color_buffer[i] = to_uint16(color);
+
     ili9325_set_cursor(0, 0);
 
-    /* Fill the entire screen */
-    for(uint i = 0; i < (width() * height()); i++)
+    for(int i = 0; i < 240; ++i)
     {
-        ili9325_write_ram(to_uint16(color));   // Write the color to the GRAM
+        ili9325_write_ram_dma(color_buffer, 320);
     }
 }
 
