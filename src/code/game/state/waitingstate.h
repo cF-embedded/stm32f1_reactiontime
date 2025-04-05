@@ -10,10 +10,19 @@
 #ifndef _WAITINGSTATE_H
 #define _WAITINGSTATE_H
 
+extern "C"
+{
+#include "platform_specific.h"
+}
+
 #include "gamestate.h"
 
 class WaitingState : public GameState
 {
+  private:
+    tick_t waitingTime;
+    bool isTimeElapsed(tick_t time);
+
   public:
     void Enter(Game* game) override;
     void Update(Game* game) override;

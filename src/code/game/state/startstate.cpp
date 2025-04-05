@@ -28,7 +28,4 @@ void StartState::Update(Game* game)
     }
 }
 
-void StartState::Exit(Game* game)
-{
-    game->Lcd.fillScreen(Color::RED);
-}
+void StartState::Exit(Game* game) {}
