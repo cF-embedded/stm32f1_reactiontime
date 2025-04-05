@@ -69,13 +69,12 @@ void Game::Exit()
 static void game_task(void* params)
 {
     (void)params;
-    tick_t tick_cnt;
+
+    Game game;
 
     while(1)
     {
-        tick_cnt = rtos_tick_count_get();
-
-        rtos_delay_until(&tick_cnt, 100);
+        game.Update();
     }
 
     vTaskSuspend(NULL);
