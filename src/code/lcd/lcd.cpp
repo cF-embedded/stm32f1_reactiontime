@@ -121,7 +121,7 @@ void LCD::fillScreen(Color color)
 
     for(int i = 0; i < 240; ++i)
     {
-        ili9325_write_ram_dma(color_buffer, 320);
+        ili9325_write_ram_fast(color_buffer, 320);
     }
 }
 
