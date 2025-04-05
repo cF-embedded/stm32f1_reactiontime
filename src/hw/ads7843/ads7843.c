@@ -27,7 +27,7 @@ void ads7843_init(void)
 
 uint32_t ads7843_touch_screen_get(void)
 {
-    return (GPIOB->IDR & (1 << TOUCH_SCHREEN_PIN)) == 0;
+    return (GPIOB->IDR & (1 << TOUCH_SCHREEN_PIN)) != 0;
 }
 
 void gpio_init(void)

@@ -83,7 +83,7 @@ LCD::LCD(int16_t width, int16_t height) : Adafruit_GFX(width, height)
 
 bool LCD::isTouchScreenPressed()
 {
-    return (ads7843_touch_screen_get == 0);
+    return (ads7843_touch_screen_get() == 0);
 }
 
 void LCD::drawPixel(int16_t x, int16_t y, uint16_t color)
