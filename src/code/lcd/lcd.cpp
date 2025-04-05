@@ -9,6 +9,7 @@
 
 #include "lcd.h"
 #include "Adafruit_GFX.h"
+#include "ads7843.h"
 #include "ili9325.h"
 #include "ili9325_registers.h"
 #include "platform_specific.h"
@@ -16,6 +17,7 @@
 
 LCD::LCD(int16_t width, int16_t height) : Adafruit_GFX(width, height)
 {
+    ads7843_init();
     ili9325_init();
 
     ili9325_write_reg(ILI9325_INTERNAL_TIMING_1, 0x3008);                 // Set internal timing
@@ -62,8 +64,8 @@ LCD::LCD(int16_t width, int16_t height) : Adafruit_GFX(width, height)
     ili9325_write_reg(ILI9325_VERTICAL_ADDRESS_START_POSITION, 0x0000);     // Vertical GRAM Start Address = 0
     ili9325_write_reg(ILI9325_VERTICAL_ADDRESS_END_POSITION, 0x013F);       // Vertical GRAM End Address = 319
     ili9325_write_reg(ILI9325_DRIVER_OUTPUT_CONTROL_2, 0x2700);
-    ili9325_write_reg(ILI9325_BASE_IMAGE_DISPLAY_CONTROL, 0x0003);          // NDL,VLE, REV (other: 0x0001)
-    ili9325_write_reg(ILI9325_VERTICAL_SCROLL_CONTROL, 0x0000);             // Set scrolling line
+    ili9325_write_reg(ILI9325_BASE_IMAGE_DISPLAY_CONTROL, 0x0003);   // NDL,VLE, REV (other: 0x0001)
+    ili9325_write_reg(ILI9325_VERTICAL_SCROLL_CONTROL, 0x0000);      // Set scrolling line
     ili9325_write_reg(ILI9325_PARTIAL_IMAGE_1_DISPLAY_POSITION, 0x0000);
     ili9325_write_reg(ILI9325_PARTIAL_IMAGE_1_AREA_START_LINE, 0x0000);
     ili9325_write_reg(ILI9325_PARTIAL_IMAGE_1_AREA_END_LINE, 0x0000);
@@ -77,6 +79,11 @@ LCD::LCD(int16_t width, int16_t height) : Adafruit_GFX(width, height)
     ili9325_write_reg(ILI9325_PANEL_INTERFACE_CONTROL_5, 0x0000);
     ili9325_write_reg(ILI9325_PANEL_INTERFACE_CONTROL_6, 0x0000);
     ili9325_write_reg(ILI9325_DISPLAY_CONTROL_1, 0x0133);   // 262K color and display ON
+}
+
+bool LCD::isTouchScreenPressed()
+{
+    return (ads7843_touch_screen_get() == 0);
 }
 
 void LCD::drawPixel(int16_t x, int16_t y, uint16_t color)

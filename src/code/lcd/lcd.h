@@ -23,6 +23,7 @@ class LCD : public Adafruit_GFX
   public:
     LCD(int16_t width, int16_t height);
 
+    bool isTouchScreenPressed();
     void begin();
     void drawPixel(int16_t x, int16_t y, uint16_t color);
     void fillScreen(uint16_t color);
