@@ -10,6 +10,11 @@
 #ifndef _REACTIONSTATE_H
 #define _REACTIONSTATE_H
 
+extern "C"
+{
+#include "platform_specific.h"
+}
+
 #include "gamestate.h"
 
 class ReactionState : public GameState
@@ -18,6 +23,9 @@ class ReactionState : public GameState
     void Enter(Game* game) override;
     void Update(Game* game) override;
     void Exit(Game* game) override;
+
+  private:
+    tick_t reactionTime;
 };
 
 #endif   // _REACTIONSTATE_H

@@ -19,14 +19,14 @@ extern "C"
 
 class WaitingState : public GameState
 {
-  private:
-    tick_t waitingTime;
-    bool isTimeElapsed(tick_t time);
-
   public:
     void Enter(Game* game) override;
     void Update(Game* game) override;
     void Exit(Game* game) override;
+
+  private:
+    tick_t waitingTime;
+    bool isTimeElapsed(tick_t time);
 };
 
 #endif   // _WAITINGSTATE_H
