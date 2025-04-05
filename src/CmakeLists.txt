@@ -20,6 +20,7 @@ set(CXX_SRCS
     code/game/state/reactionstate.cpp
     code/game/state/waitingstate.cpp
     code/game/state/resultstate.cpp
+    code/game/state/quicklystate.cpp
 )
 
 set(INCLUDE_DIRS

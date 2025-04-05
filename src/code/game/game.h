@@ -12,6 +12,7 @@
 
 #include "gamestate.h"
 #include "lcd.h"
+#include "quicklystate.h"
 #include "reactionstate.h"
 #include "resultstate.h"
 #include "startstate.h"
